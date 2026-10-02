@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ingepak · Propuesta de rediseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Newsreader:opsz,wght@6..72,400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#03132b; --blue:#1668c8; --cyan:#16c1c8;
+  --ink:#16202e; --muted:#56606e; --paper:#f5f7fa; --surface:#ffffff; --line:#dde3ea;
+  --stone:#ece6db; --stone-2:#e2d9ca; --stone-ink:#2b2118; --bronze:#7d5117;
+  --sans:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#e7ecf2; --muted:#a3adba; --paper:#0a1628; --surface:#0f1e33; --line:#23344d;
+    --blue:#5aa2f0; --stone:#231d16; --stone-2:#2e261d; --stone-ink:#efe6d8; --bronze:#d9a55e;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#e7ecf2; --muted:#a3adba; --paper:#0a1628; --surface:#0f1e33; --line:#23344d;
+  --blue:#5aa2f0; --stone:#231d16; --stone-2:#2e261d; --stone-ink:#efe6d8; --bronze:#d9a55e;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6}
+img,svg{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Aviso de propuesta */
+.notice{background:var(--navy);color:#cfd8e4;font-size:14px;text-align:center;padding:8px 16px}
+
+/* Cabecera */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-stretch:115%;letter-spacing:.02em;font-size:21px}
+.logo svg{width:30px;height:30px}
+nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+nav a{text-decoration:none;font-size:15px;color:var(--muted);font-weight:500}
+nav a:hover{color:var(--ink)}
+.call{margin-left:auto;display:flex;align-items:center;gap:14px}
+.call small{color:var(--muted);font-size:13px;line-height:1.2;text-align:right}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:4px;padding:11px 18px;font:600 15px var(--sans);text-decoration:none;cursor:pointer}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:#0f56a8}
+.menu-btn{display:none}
+
+/* Hero dividido */
+.hero-intro{padding:56px 0 32px}
+.hero-intro h1{font-size:clamp(34px,5vw,58px);line-height:1.04;font-weight:750;font-stretch:88%;letter-spacing:-.015em;margin:0;max-width:18ch}
+.hero-intro p{color:var(--muted);max-width:56ch;margin:18px 0 0;font-size:18px}
+.split{display:flex;min-height:470px;border-radius:6px;overflow:hidden}
+.panel{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:36px;text-decoration:none;transition:flex-grow .5s cubic-bezier(.2,.7,.2,1);overflow:hidden;isolation:isolate}
+.split:hover .panel:hover,.split .panel:focus-visible{flex-grow:1.45}
+.panel .art{position:absolute;inset:0;z-index:-1}
+.panel .art svg{width:100%;height:100%}
+.p-new{background:var(--navy);color:#fff}
+.p-rest{background:#e9e1d3;color:#2b2118}
+.panel h2{margin:0 0 10px;font-size:clamp(26px,3vw,38px);line-height:1.1}
+.p-new h2{font-weight:750;font-stretch:90%;letter-spacing:-.01em}
+.p-rest h2{font-family:var(--serif);font-weight:500;font-size:clamp(30px,3.4vw,44px)}
+.panel p{margin:0 0 20px;max-width:40ch;font-size:16px}
+.p-new p{color:#c3d0e0}
+.p-rest p{color:#4d3f30}
+.panel .go{font-weight:600;font-size:15px;display:inline-flex;gap:8px;align-items:center;border-bottom:2px solid currentColor;padding-bottom:2px;align-self:flex-start}
+.p-new .go{color:var(--cyan)}
+.p-rest .go{color:#7d5117}
+.facts{display:flex;flex-wrap:wrap;gap:12px 40px;padding:26px 0 8px;color:var(--muted);font-size:15px}
+.facts strong{color:var(--ink);font-weight:650}
+
+/* Secciones */
+section{padding:88px 0}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:44px}
+.sec-head h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.08}
+.sec-head p{margin:0;color:var(--muted);max-width:52ch}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:3px}
+.tag::before{content:"";width:8px;height:8px}
+.tag-new{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
+.tag-new::before{background:var(--blue)}
+.tag-rest{background:color-mix(in srgb,var(--bronze) 16%,transparent);color:var(--bronze)}
+.tag-rest::before{background:var(--bronze);border-radius:50%}
+
+/* Obra nueva */
+#obra-nueva .sec-head h2{font-weight:750;font-stretch:90%;letter-spacing:-.01em}
+.services{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--blue)}
+.svc{padding:26px 24px 28px 0;border-right:1px solid var(--line)}
+.svc + .svc{padding-left:24px}
+.svc:last-child{border-right:0}
+.svc svg{width:34px;height:34px;color:var(--blue);margin-bottom:18px}
+.svc h3{margin:0 0 10px;font-size:19px;line-height:1.25;font-weight:650}
+.svc ul{margin:0;padding:0;list-style:none;color:var(--muted);font-size:15px}
+.svc li{padding:5px 0;border-bottom:1px dashed var(--line)}
+.svc li:last-child{border-bottom:0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:64px;counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding:22px 20px 0 0;border-top:1px solid var(--line)}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;top:-13px;left:0;background:var(--paper);padding-right:10px;font-weight:700;color:var(--blue);font-size:15px}
+.steps h4{margin:0 0 6px;font-size:17px}
+.steps p{margin:0;color:var(--muted);font-size:15px}
+.steps-title{font-size:15px;color:var(--muted);margin:64px 0 0}
+
+/* Restauración */
+#restauracion{background:var(--stone);color:var(--stone-ink)}
+#restauracion .sec-head h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,4vw,52px);letter-spacing:-.005em}
+#restauracion .sec-head p,#restauracion .muted{color:color-mix(in srgb,var(--stone-ink) 72%,transparent)}
+.rest-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:start}
+.compare{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:4/3;background:#d8cdb9;--pos:50%;user-select:none}
+.compare svg{position:absolute;inset:0;width:100%;height:100%}
+.compare .before{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;background:#fff;transform:translateX(-1px);pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.compare .handle::after{content:"";position:absolute;top:50%;left:50%;width:40px;height:40px;transform:translate(-50%,-50%);border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237d5117' stroke-width='2'%3E%3Cpath d='M9 6l-5 6 5 6M15 6l5 6-5 6'/%3E%3C/svg%3E");background-size:22px;background-repeat:no-repeat;background-position:center}
+.compare .lbl{position:absolute;bottom:14px;font-size:13px;font-weight:600;background:rgba(43,33,24,.78);color:#fff;padding:4px 10px;border-radius:3px}
+.compare .lbl.l{left:14px}.compare .lbl.r{right:14px}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.compare:has(input:focus-visible){outline:3px solid var(--bronze);outline-offset:3px}
+.cap{font-size:14px;margin-top:12px}
+.rest-list{list-style:none;margin:0;padding:0}
+.rest-list li{padding:20px 0;border-bottom:1px solid color-mix(in srgb,var(--stone-ink) 18%,transparent)}
+.rest-list li:first-child{padding-top:0}
+.rest-list h3{font-family:var(--serif);font-weight:500;font-size:23px;margin:0 0 4px;line-height:1.2}
+.rest-list p{margin:0;font-size:15.5px;line-height:1.65}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);margin-top:72px;list-style:none;padding:0;counter-reset:r}
+.timeline li{counter-increment:r;padding:0 22px 0 0;position:relative}
+.timeline li::before{content:counter(r,upper-roman);display:block;font-family:var(--serif);font-size:30px;color:var(--bronze);line-height:1;margin-bottom:12px}
+.timeline li::after{content:"";position:absolute;top:15px;left:52px;right:22px;border-top:1px solid color-mix(in srgb,var(--bronze) 45%,transparent)}
+.timeline li:last-child::after{display:none}
+.timeline h4{font-family:var(--serif);font-weight:500;font-size:20px;margin:0 0 6px}
+.timeline p{margin:0;font-size:15px}
+
+/* Obras */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.filters button{font:500 15px var(--sans);padding:9px 16px;border-radius:4px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.works{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 24px;list-style:none;margin:0;padding:0}
+.work[hidden]{display:none}
+.work .ph{aspect-ratio:3/2;border-radius:4px;overflow:hidden;margin-bottom:14px}
+.work .ph svg{width:100%;height:100%}
+.work h3{margin:10px 0 4px;font-size:18px;line-height:1.3;font-weight:600}
+.work.rest h3{font-family:var(--serif);font-weight:500;font-size:21px}
+.work p{margin:0;color:var(--muted);font-size:14.5px}
+
+/* Clientes */
+#clientes{padding:64px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+#clientes h2{font-size:22px;margin:0 0 24px;font-weight:600}
+.logos{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.logos div{height:72px;border:1px dashed var(--line);border-radius:4px;display:grid;place-items:center;color:var(--muted);font-size:13px}
+
+/* Contacto */
+.contact{display:grid;grid-template-columns:1fr 1.2fr;gap:64px}
+.contact h2{font-size:clamp(30px,3.6vw,44px);line-height:1.08;margin:0 0 16px;font-weight:750;font-stretch:90%}
+.contact dl{margin:28px 0 0;display:grid;gap:14px}
+.contact dt{font-size:13px;color:var(--muted)}
+.contact dd{margin:0;font-weight:500}
+form{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:28px}
+fieldset{border:0;margin:0 0 20px;padding:0}
+legend,label{display:block;font-weight:600;font-size:15px;margin-bottom:8px}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice label{margin:0;font-weight:500;border:1px solid var(--line);border-radius:4px;padding:14px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.choice input{accent-color:var(--blue);margin-top:5px}
+.choice label:has(input:checked){border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.choice label.r:has(input:checked){border-color:var(--bronze);box-shadow:inset 0 0 0 1px var(--bronze)}
+.choice small{display:block;color:var(--muted);font-weight:400;font-size:13.5px;line-height:1.4}
+.field{margin-bottom:18px}
+.field input,.field textarea{width:100%;font:16px var(--sans);padding:11px 12px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink)}
+.field textarea{min-height:110px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-msg{margin:14px 0 0;font-size:15px;color:var(--blue)}
+
+footer{background:var(--navy);color:#b9c6d6;padding:48px 0 40px;font-size:15px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px}
+footer strong{color:#fff}
+
+@media (max-width:960px){
+  nav{display:none}
+  .call small{display:none}
+  .sec-head,.rest-grid,.contact{grid-template-columns:1fr;gap:24px}
+  .services{grid-template-columns:1fr 1fr}
+  .svc{border-right:0;border-bottom:1px solid var(--line);padding:24px 16px 24px 0!important}
+  .steps,.timeline{grid-template-columns:1fr 1fr;gap:36px 20px}
+  .timeline li::after{display:none}
+  .works{grid-template-columns:1fr 1fr}
+  .logos{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .split{flex-direction:column;min-height:0}
+  .panel{min-height:340px;padding:26px}
+  .services,.steps,.timeline,.works,.choice,.two{grid-template-columns:1fr}
+  section{padding:64px 0}
+  .call .btn span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<div class="notice" role="note">Propuesta de diseño para Ingepak. Las ilustraciones y los proyectos marcados como ejemplo se reemplazan por fotos y obras reales.</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Ingepak, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="4" fill="#1668c8"/><path d="M8 24V8h5l6 10V8h5v16h-5l-6-10v10z" fill="#fff"/></svg>
+      INGEPAK
+    </a>
+    <nav aria-label="Principal">
+      <ul>
+        <li><a href="#obra-nueva">Obra nueva</a></li>
+        <li><a href="#restauracion">Restauración</a></li>
+        <li><a href="#obras">Obras realizadas</a></li>
+        <li><a href="#clientes">Clientes</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+    <div class="call">
+      <small>Asistencia técnica<br>15-5120-5070</small>
+      <a class="btn btn-blue" href="#contacto">Pedir presupuesto</a>
+    </div>
+  </div>
+</header>
+
+<main id="inicio">
+  <div class="wrap">
+    <div class="hero-intro">
+      <h1>Ingeniería eléctrica, civil y mecánica para construir y para recuperar</h1>
+      <p>Más de 30 años ejecutando obras industriales, hospitalarias y de servicios públicos, y devolviendo a edificios existentes su valor y su seguridad.</p>
+    </div>
+
+    <div class="split">
+      <a class="panel p-new" href="#obra-nueva">
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 600 470" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#16c1c8" stroke-opacity=".09"/></pattern>
+              <pattern id="g2" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100 0H0V100" fill="none" stroke="#16c1c8" stroke-opacity=".18"/></pattern>
+            </defs>
+            <rect width="600" height="470" fill="url(#g1)"/><rect width="600" height="470" fill="url(#g2)"/>
+            <g fill="none" stroke="#16c1c8" stroke-width="1.5" stroke-opacity=".75">
+              <path d="M300 250V110l90-40 90 40v140"/>
+              <path d="M480 250V130h90v120"/>
+              <path d="M280 250h310"/>
+              <rect x="330" y="150" width="40" height="60"/><rect x="410" y="150" width="40" height="60"/>
+              <rect x="498" y="160" width="54" height="36"/>
+              <path d="M510 170h30M510 180h30M510 190h20" stroke-opacity=".5"/>
+              <path d="M570 60v190M555 60h30M560 80l10-20 10 20" />
+              <path d="M300 280v10m180-10v10M300 285h180" stroke-dasharray="4 4" stroke-opacity=".6"/>
+            </g>
+            <text x="360" y="304" fill="#16c1c8" fill-opacity=".7" font-family="Archivo, sans-serif" font-size="12">18,00 m</text>
+          </svg>
+        </div>
+        <span class="tag tag-new" style="align-self:flex-start;margin-bottom:14px;color:#8fe3e6;background:rgba(22,193,200,.14)">Obra nueva e industrial</span>
+        <h2>Obras eléctricas y civiles, llave en mano</h2>
+        <p>Tableros, redes de media y baja tensión, obras hospitalarias, laboratorios y consultoría industrial.</p>
+        <span class="go">Ver servicios de obra nueva</span>
+      </a>
+
+      <a class="panel p-rest" href="#restauracion">
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 600 470" preserveAspectRatio="xMidYMid slice">
+            <rect width="600" height="470" fill="#e9e1d3"/>
+            <g fill="none" stroke="#7d5117" stroke-opacity=".38" stroke-width="1.4">
+              <path d="M330 470V120h240v350"/>
+              <path d="M318 120h264M322 110h256l-10-14H332z"/>
+              <path d="M330 250h240M326 244h248"/>
+              <g><path d="M360 230v-70a20 20 0 0 1 40 0v70z"/><path d="M430 230v-70a20 20 0 0 1 40 0v70z"/><path d="M500 230v-70a20 20 0 0 1 40 0v70z"/></g>
+              <g><path d="M360 360v-70a20 20 0 0 1 40 0v70z"/><path d="M430 360v-70a20 20 0 0 1 40 0v70z"/><path d="M500 360v-70a20 20 0 0 1 40 0v70z"/></g>
+              <path d="M352 236h56M422 236h56M492 236h56M352 366h56M422 366h56M492 366h56"/>
+              <path d="M355 236v10M405 236v10M425 236v10M475 236v10M495 236v10M545 236v10" stroke-opacity=".3"/>
+              <path d="M330 390h240M330 410h240M330 430h240M330 450h240" stroke-opacity=".2"/>
+            </g>
+          </svg>
+        </div>
+        <span class="tag tag-rest" style="align-self:flex-start;margin-bottom:14px;color:#7d5117">Restauración y puesta en valor</span>
+        <h2>Recuperar lo construido, con criterio técnico</h2>
+        <p>Diagnóstico, adecuación de instalaciones, impermeabilización y puesta en valor de edificios existentes.</p>
+        <span class="go">Ver servicios de restauración</span>
+      </a>
+    </div>
+
+    <div class="facts">
+      <span><strong>Más de 30 años</strong> de trayectoria</span>
+      <span><strong>Sector público y privado</strong></span>
+      <span><strong>Ingeniería eléctrica, civil y mecánica</strong> en un mismo equipo</span>
+    </div>
+  </div>
+
+  <!-- OBRA NUEVA -->
+  <section id="obra-nueva" aria-labelledby="t-nueva">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="tag tag-new">Obra nueva e industrial</span>
+          <h2 id="t-nueva" style="margin-top:14px">Proyectamos y ejecutamos la obra completa</h2>
+        </div>
+        <p>Un solo equipo resuelve la parte eléctrica, civil y mecánica, desde el diseño del proyecto hasta la habilitación ante organismos públicos.</p>
+      </div>
+
+      <div class="services">
+        <div class="svc">
+          <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M19 3L8 19h9l-2 12 11-16h-9z"/></svg>
+          <h3>Obras eléctricas industriales</h3>
+          <ul><li>Tableros de distribución: armado e instalación</li><li>Tendido de redes de media y baja tensión</li><li>Iluminación pública</li><li>Alimentación de fuerza motriz</li></ul>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 30h26M7 30V12l10-7 10 7v18M13 30v-8h8v8"/></svg>
+          <h3>Obras civiles llave en mano</h3>
+          <ul><li>Obras hospitalarias y laboratorios</li><li>Redes de agua potable, sanitarias y pluviales</li><li>Impermeabilizaciones y zanjeos</li></ul>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="6" width="26" height="20"/><path d="M4 12h26M10 18h8M10 22h12"/></svg>
+          <h3>Consultoría industrial</h3>
+          <ul><li>Diseño de proyectos industriales</li></ul>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 4h12l6 6v20H9z"/><path d="M21 4v6h6M13 20l3 3 6-7"/></svg>
+          <h3>Habilitaciones</h3>
+          <ul><li>Trámites ante servicios públicos y municipios</li></ul>
+        </div>
+      </div>
+
+      <p class="steps-title">Cómo trabajamos en obra nueva</p>
+      <ol class="steps" style="margin-top:28px">
+        <li><h4>Proyecto</h4><p>Relevamiento del predio, cálculo y documentación técnica.</p></li>
+        <li><h4>Habilitaciones</h4><p>Presentaciones ante distribuidoras y municipios.</p></li>
+        <li><h4>Ejecución</h4><p>Obra eléctrica, civil y mecánica con una sola dirección.</p></li>
+        <li><h4>Entrega</h4><p>Pruebas, puesta en marcha y documentación conforme a obra.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- RESTAURACIÓN -->
+  <section id="restauracion" aria-labelledby="t-rest">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="tag tag-rest">Restauración y puesta en valor</span>
+          <h2 id="t-rest" style="margin-top:14px">Cada edificio existente pide primero un diagnóstico</h2>
+        </div>
+        <p>Antes de intervenir estudiamos el estado de la estructura, los materiales y las instalaciones, para que la obra conserve lo valioso y corrija lo que pone en riesgo el edificio.</p>
+      </div>
+
+      <div class="rest-grid">
+        <figure style="margin:0">
+          <div class="compare" id="compare">
+            <svg class="after" viewBox="0 0 400 300" aria-hidden="true">
+              <rect width="400" height="300" fill="#cfe0ea"/>
+              <rect x="60" y="40" width="280" height="270" fill="#e8dcc6"/>
+              <rect x="48" y="30" width="304" height="14" fill="#dccdb1"/><rect x="56" y="22" width="288" height="10" fill="#d3c2a3"/>
+              <rect x="60" y="150" width="280" height="8" fill="#d8c8aa"/>
+              <g fill="#3d4a55"><path d="M90 135v-55a18 18 0 0 1 36 0v55z"/><path d="M182 135v-55a18 18 0 0 1 36 0v55z"/><path d="M274 135v-55a18 18 0 0 1 36 0v55z"/>
+              <path d="M90 260v-55a18 18 0 0 1 36 0v55z"/><path d="M182 260v-55a18 18 0 0 1 36 0v55z"/><path d="M274 260v-55a18 18 0 0 1 36 0v55z"/></g>
+              <g fill="none" stroke="#2b2f33" stroke-width="2"><path d="M84 137h48M176 137h48M268 137h48"/><path d="M86 137v10M130 137v10M178 137v10M222 137v10M270 137v10M314 137v10M86 147h44M178 147h44M270 147h44"/></g>
+              <g stroke="#cbb994" stroke-width="1"><path d="M60 180h280M60 200h280M60 280h280"/></g>
+            </svg>
+            <svg class="before" viewBox="0 0 400 300" aria-hidden="true">
+              <rect width="400" height="300" fill="#c9d0d4"/>
+              <rect x="60" y="40" width="280" height="270" fill="#a99c86"/>
+              <rect x="48" y="30" width="304" height="14" fill="#8e826d"/><path d="M56 22h180v10H56zM262 22h82v10h-82z" fill="#857964"/>
+              <rect x="60" y="150" width="280" height="8" fill="#8f836d"/>
+              <g fill="#23292e"><path d="M90 135v-55a18 18 0 0 1 36 0v55z"/><path d="M182 135v-55a18 18 0 0 1 36 0v55z"/><path d="M274 135v-55a18 18 0 0 1 36 0v55z"/>
+              <path d="M90 260v-55a18 18 0 0 1 36 0v55z"/><path d="M182 260v-55a18 18 0 0 1 36 0v55z"/><path d="M274 260v-55a18 18 0 0 1 36 0v55z"/></g>
+              <g fill="none" stroke="#3b3326" stroke-width="2"><path d="M84 137h48M176 137h32M268 137h48"/><path d="M86 137v10M130 137v8M178 137v10M270 137v10M314 137v6"/></g>
+              <g fill="#5d523f" fill-opacity=".45"><path d="M60 44h280v24c-30 10-50-6-80 4s-60-8-90 2-70-4-110 6z"/><ellipse cx="150" cy="170" rx="30" ry="12"/><path d="M230 158c10 20 0 40 6 70s-6 40 0 60h-14c-4-30 8-60 0-130z"/></g>
+              <g fill="none" stroke="#3a2f22" stroke-width="1.6"><path d="M160 60l8 22-6 14 10 26"/><path d="M300 180l-10 18 6 12-8 22"/><path d="M70 230l14 10-4 16 12 12"/></g>
+              <path d="M236 22h26v8l-8 10-10-6z" fill="#c9d0d4"/>
+              <g stroke="#3d3a2f" stroke-width="1.2"><path d="M140 44l-4 30M200 44l6 24" stroke-dasharray="2 3"/></g>
+            </svg>
+            <div class="handle"></div>
+            <span class="lbl l">Antes</span><span class="lbl r">Después</span>
+            <label class="sr" for="cmp">Deslizá para comparar el antes y el después de la fachada</label>
+            <input id="cmp" type="range" min="0" max="100" value="50" aria-valuetext="50% antes">
+          </div>
+          <figcaption class="cap muted">Ilustración de ejemplo. Acá va un par de fotos reales de una obra de restauración, tomadas desde el mismo punto.</figcaption>
+        </figure>
+
+        <ul class="rest-list">
+          <li><h3>Relevamiento y diagnóstico</h3><p class="muted">Inspección de estructura, fachadas, cubiertas e instalaciones, con informe técnico de patologías.</p></li>
+          <li><h3>Adecuación de instalaciones</h3><p class="muted">Renovación de tableros y redes eléctricas en edificios existentes, respetando su valor arquitectónico.</p></li>
+          <li><h3>Impermeabilización y cubiertas</h3><p class="muted">Recuperación de azoteas, desagües pluviales y tratamiento de humedades.</p></li>
+          <li><h3>Puesta en valor de fachadas</h3><p class="muted">Limpieza, consolidación y reposición de elementos ornamentales.</p></li>
+        </ul>
+      </div>
+
+      <ol class="timeline" aria-label="Cómo trabajamos en restauración">
+        <li><h4>Diagnóstico</h4><p class="muted">Qué hay, en qué estado está y qué lo está dañando.</p></li>
+        <li><h4>Estudio de materiales</h4><p class="muted">Ensayos y criterios para intervenir sin alterar lo original.</p></li>
+        <li><h4>Intervención</h4><p class="muted">Obra por etapas, con el edificio en uso cuando es necesario.</p></li>
+        <li><h4>Mantenimiento</h4><p class="muted">Plan de conservación para que la obra dure.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- OBRAS -->
+  <section id="obras" aria-labelledby="t-obras">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="t-obras" style="font-weight:750;font-stretch:90%">Obras realizadas</h2>
+        <p>Cada obra lleva la etiqueta de su tipo, para que encuentres rápido trabajos parecidos al tuyo.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrar obras">
+        <button type="button" data-f="all" aria-pressed="true">Todas</button>
+        <button type="button" data-f="new" aria-pressed="false">Obra nueva</button>
+        <button type="button" data-f="rest" aria-pressed="false">Restauración</button>
+      </div>
+      <ul class="works" id="works"></ul>
+      <p class="muted" style="font-size:14px;color:var(--muted);margin-top:24px">Proyectos de ejemplo. Se cargan desde el gestor de contenidos con foto, ubicación, año y descripción.</p>
+    </div>
+  </section>
+
+  <section id="clientes" aria-labelledby="t-cli">
+    <div class="wrap">
+      <h2 id="t-cli">Empresas y organismos que confían en nosotros</h2>
+      <div class="logos"><div>Logo cliente</div><div>Logo cliente</div><div>Logo cliente</div><div>Logo cliente</div><div>Logo cliente</div><div>Logo cliente</div></div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" aria-labelledby="t-con">
+    <div class="wrap contact">
+      <div>
+        <h2 id="t-con">Contanos qué necesitás</h2>
+        <p style="color:var(--muted);max-width:40ch;margin:0">Te respondemos con una primera evaluación técnica y los próximos pasos.</p>
+        <dl>
+          <div><dt>Asistencia técnica</dt><dd><a href="tel:+541151205070">15-5120-5070</a> y <a href="tel:+541145364432">15-4536-4432</a></dd></div>
+          <div><dt>Correo</dt><dd><a href="mailto:contacto@ingepak.com">contacto@ingepak.com</a></dd></div>
+          <div><dt>Oficina</dt><dd>Balbastro 2158, CABA</dd></div>
+          <div><dt>Instagram</dt><dd>@ingepak.srl</dd></div>
+        </dl>
+      </div>
+      <form id="form" novalidate>
+        <fieldset>
+          <legend>¿Qué tipo de obra es?</legend>
+          <div class="choice">
+            <label><input type="radio" name="tipo" value="nueva" checked><span>Obra nueva o industrial<small>Instalaciones, redes, obra civil</small></span></label>
+            <label class="r"><input type="radio" name="tipo" value="rest"><span>Restauración<small>Edificio existente a recuperar</small></span></label>
+          </div>
+        </fieldset>
+        <div class="two">
+          <div class="field"><label for="n">Nombre y empresa</label><input id="n" autocomplete="name"></div>
+          <div class="field"><label for="e">Correo o teléfono</label><input id="e" autocomplete="email"></div>
+        </div>
+        <div class="field"><label for="m">Descripción de la obra</label><textarea id="m" placeholder="Ubicación, superficie aproximada y qué necesitás resolver"></textarea></div>
+        <button class="btn btn-blue" type="submit">Enviar consulta</button>
+        <p class="form-msg" id="msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><strong>INGEPAK</strong><br>Ingeniería eléctrica, civil y mecánica.<br>Sector público y privado.</div>
+    <div>Balbastro 2158, CABA<br>15-5120-5070 · 15-4536-4432<br>contacto@ingepak.com</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Comparador antes/después
+  var box=document.getElementById('compare'), r=document.getElementById('cmp');
+  function set(){box.style.setProperty('--pos',r.value+'%');r.setAttribute('aria-valuetext',r.value+'% antes');}
+  r.addEventListener('input',set); set();
+
+  // Obras de ejemplo
+  var works=[
+    {t:'new',n:'Tablero general de distribución',d:'Planta industrial · armado e instalación'},
+    {t:'rest',n:'Recuperación de cubierta y pluviales',d:'Edificio de oficinas existente'},
+    {t:'new',n:'Instalaciones para laboratorio',d:'Obra civil y eléctrica llave en mano'},
+    {t:'new',n:'Tendido de red de media tensión',d:'Predio industrial'},
+    {t:'rest',n:'Adecuación eléctrica de edificio histórico',d:'Renovación de tableros y cableado'},
+    {t:'rest',n:'Puesta en valor de fachada',d:'Consolidación y limpieza'}
+  ];
+  function art(t,i){
+    if(t==='new') return '<svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="300" height="200" fill="#03132b"/><g stroke="#16c1c8" stroke-opacity=".12"><path d="M0 40h300M0 80h300M0 120h300M0 160h300M60 0v200M120 0v200M180 0v200M240 0v200"/></g><g fill="none" stroke="#16c1c8" stroke-opacity=".7" stroke-width="1.4">'+
+      (i%2?'<path d="M40 150h220M70 150V70h160v80M90 90h40v40H90zM170 90h40v40h-40z"/>':'<path d="M40 160l60-110 60 110M150 160l60-110 60 110M100 50h110M70 105h60M180 105h60"/>')+'</g></svg>';
+    return '<svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="300" height="200" fill="#e2d9ca"/><g fill="none" stroke="#7d5117" stroke-opacity=".45" stroke-width="1.4">'+
+      (i%2?'<path d="M70 200V60h160v140M60 60h180M64 52h172M95 130V95a15 15 0 0 1 30 0v35zM175 130V95a15 15 0 0 1 30 0v35z"/>':'<path d="M40 150h220M40 150V90l110-40 110 40v60M60 100h180"/><path d="M80 150v-30M120 150v-30M160 150v-30M200 150v-30"/>')+'</g></svg>';
+  }
+  var list=document.getElementById('works');
+  list.innerHTML=works.map(function(w,i){
+    return '<li class="work '+(w.t==='rest'?'rest':'')+'" data-t="'+w.t+'"><div class="ph">'+art(w.t,i)+'</div>'+
+      '<span class="tag '+(w.t==='rest'?'tag-rest':'tag-new')+'">'+(w.t==='rest'?'Restauración':'Obra nueva')+'</span>'+
+      '<h3>'+w.n+'</h3><p>'+w.d+'</p></li>';
+  }).join('');
+  var btns=document.querySelectorAll('.filters button');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    var f=b.dataset.f;
+    list.querySelectorAll('.work').forEach(function(li){li.hidden=!(f==='all'||li.dataset.t===f);});
+  });});
+
+  // Formulario (demo)
+  document.getElementById('form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var tipo=this.querySelector('input[name=tipo]:checked').value==='rest'?'restauración':'obra nueva';
+    document.getElementById('msg').textContent='Vista previa: en la web final esta consulta de '+tipo+' se enviaría al equipo correspondiente.';
+  });
+})();
+</script>
+</body>
+</html>
